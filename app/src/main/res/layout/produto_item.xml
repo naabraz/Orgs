@@ -11,39 +11,56 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_bold"
+        android:maxLines="1"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Cesta de Frutas" />
+        tools:text="@tools:sample/lorem/random" />
 
     <TextView
         android:id="@+id/produto_item_descricao"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat"
         app:layout_constraintEnd_toEndOf="@id/produto_item_nome"
         app:layout_constraintStart_toStartOf="@id/produto_item_nome"
         app:layout_constraintTop_toBottomOf="@id/produto_item_nome"
-        tools:text="Laranja, Manga e Uva" />
+        tools:text="@tools:sample/lorem/random" />
 
     <TextView
         android:id="@+id/produto_item_valor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/holo_green_dark"
         app:layout_constraintEnd_toEndOf="@id/produto_item_nome"
         app:layout_constraintStart_toStartOf="@id/produto_item_nome"
         app:layout_constraintTop_toBottomOf="@id/produto_item_descricao"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="19.99" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:scaleType="centerCrop"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/produto_item_nome"
         app:srcCompat="@drawable/fruits"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        tools:srcCompat="@tools:sample/backgrounds/scenic"
+        android:contentDescription="@string/item_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
