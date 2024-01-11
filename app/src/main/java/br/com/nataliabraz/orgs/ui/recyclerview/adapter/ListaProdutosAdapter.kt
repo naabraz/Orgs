@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nataliabraz.orgs.databinding.ProdutoItemBinding
 import br.com.nataliabraz.orgs.model.Produto
+import java.math.BigDecimal
+import java.text.NumberFormat
+import java.util.Locale
 
 class ListaProdutosAdapter(
     private val context: Context,
@@ -14,15 +17,22 @@ class ListaProdutosAdapter(
 
     private val produtos = produtos.toMutableList()
 
-    class ViewHolder(binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        private val nome = binding.produtoItemNome
-        private val descricao = binding.produtoItemDescricao
-        private val valor = binding.produtoItemValor
-
+    class ViewHolder(private val binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun vincula(produto: Produto) {
+            val nome = binding.produtoItemNome
             nome.text = produto.nome
+
+            val descricao = binding.produtoItemDescricao
             descricao.text = produto.descricao
-            valor.text = produto.valor.toPlainString()
+
+            val valor = binding.produtoItemValor
+            val valorEmMoeda = formataParaMoedaBrasileira(produto.valor)
+            valor.text = valorEmMoeda
+        }
+
+        private fun formataParaMoedaBrasileira(valor: BigDecimal): String {
+            val formatador = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            return formatador.format(valor)
         }
     }
 

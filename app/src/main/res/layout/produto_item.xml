@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_margin="8dp"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/produto_item_nome"
             android:layout_width="0dp"
@@ -30,10 +31,10 @@
             android:id="@+id/produto_item_descricao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:maxLines="1"
             android:ellipsize="end"
             android:fontFamily="@font/montserrat"
+            android:maxLines="1"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@id/produto_item_nome"
             app:layout_constraintStart_toStartOf="@id/produto_item_nome"
             app:layout_constraintTop_toBottomOf="@id/produto_item_nome"
@@ -43,29 +44,29 @@
             android:id="@+id/produto_item_valor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/montserrat"
+            android:textColor="@android:color/holo_green_dark"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/holo_green_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/produto_item_nome"
             app:layout_constraintStart_toStartOf="@id/produto_item_nome"
             app:layout_constraintTop_toBottomOf="@id/produto_item_descricao"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="19.99" />
+            tools:text="R$ 19.99" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
-            android:scaleType="centerCrop"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/item_image"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/produto_item_nome"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/fruits"
-            tools:srcCompat="@tools:sample/backgrounds/scenic"
-            android:contentDescription="@string/item_image" />
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
