@@ -2,6 +2,7 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.nataliabraz.orgs.dao.ProdutosDAO
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
@@ -20,11 +21,21 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
 
         configuraRecyclerView()
         configuraFab()
 
-        setContentView(binding.root)
+        AlertDialog.Builder(this)
+            .setTitle("Titulo de teste")
+            .setMessage("Mensagem de teste")
+            .setPositiveButton("Confirmar") { _, _->
+
+            }
+            .setNegativeButton("Cancelar") {_, _->
+
+            }
+            .show()
     }
 
     override fun onResume() {
