@@ -3,4 +3,8 @@
     <string name="title_activity_formulario_produto">FormularioProdutoActivity</string>
     <string name="item_image">Item image</string>
     <string name="add_item">Adicionar item</string>
+    <string name="nome">Nome</string>
+    <string name="descricao">Descrição</string>
+    <string name="valor">Valor</string>
+    <string name="salvar">Salvar</string>
 </resources>
