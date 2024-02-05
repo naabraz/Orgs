@@ -1,7 +1,9 @@
 package br.com.nataliabraz.orgs.ui.activity
 
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.dao.ProdutosDAO
 import br.com.nataliabraz.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.nataliabraz.orgs.model.Produto
@@ -18,6 +20,17 @@ class FormularioProdutoActivity : AppCompatActivity() {
         configuraBotaoSalvar()
 
         setContentView(binding.root)
+        binding.activityFormularioProdutoImagem.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setView(R.layout.formulario_imagem)
+                .setPositiveButton("Confirmar") { _, _->
+
+                }
+                .setNegativeButton("Cancelar") {_, _->
+
+                }
+                .show()
+        }
     }
 
     private fun configuraBotaoSalvar() {

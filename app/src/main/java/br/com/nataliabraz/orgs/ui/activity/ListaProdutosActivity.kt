@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.dao.ProdutosDAO
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
@@ -25,17 +26,6 @@ class ListaProdutosActivity : AppCompatActivity() {
 
         configuraRecyclerView()
         configuraFab()
-
-        AlertDialog.Builder(this)
-            .setTitle("Titulo de teste")
-            .setMessage("Mensagem de teste")
-            .setPositiveButton("Confirmar") { _, _->
-
-            }
-            .setNegativeButton("Cancelar") {_, _->
-
-            }
-            .show()
     }
 
     override fun onResume() {

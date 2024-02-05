@@ -7,4 +7,5 @@
     <string name="descricao">Descrição</string>
     <string name="valor">Valor</string>
     <string name="salvar">Salvar</string>
+    <string name="carregar">Carregar</string>
 </resources>
