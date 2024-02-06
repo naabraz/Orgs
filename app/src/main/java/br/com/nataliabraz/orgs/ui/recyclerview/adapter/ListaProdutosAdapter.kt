@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nataliabraz.orgs.databinding.ProdutoItemBinding
 import br.com.nataliabraz.orgs.model.Produto
+import coil.load
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
@@ -28,6 +29,7 @@ class ListaProdutosAdapter(
             val valor = binding.produtoItemValor
             val valorEmMoeda = formataParaMoedaBrasileira(produto.valor)
             valor.text = valorEmMoeda
+            binding.imageView.load("https://images.pexels.com/photos/5946081/pexels-photo-5946081.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")
         }
 
         private fun formataParaMoedaBrasileira(valor: BigDecimal): String {
