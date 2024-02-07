@@ -2,9 +2,7 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.dao.ProdutosDAO
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
