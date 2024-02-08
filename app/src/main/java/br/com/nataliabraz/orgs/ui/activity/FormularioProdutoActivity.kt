@@ -4,6 +4,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.dao.ProdutosDAO
 import br.com.nataliabraz.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.nataliabraz.orgs.databinding.FormularioImagemBinding
@@ -48,7 +49,11 @@ class FormularioProdutoActivity : AppCompatActivity() {
                 .setView(bindingFormularioImagem.root)
                 .setPositiveButton("Confirmar") { _, _->
                     url = bindingFormularioImagem.formularioImagemUrl.text.toString()
-                    binding.activityFormularioProdutoImagem.load(url, imageLoader)
+                    binding.activityFormularioProdutoImagem.load(url, imageLoader) {
+                        fallback(R.drawable.erro)
+                        error(R.drawable.erro)
+                        placeholder(R.drawable.placeholder)
+                    }
                 }
                 .setNegativeButton("Cancelar") {_, _->
 

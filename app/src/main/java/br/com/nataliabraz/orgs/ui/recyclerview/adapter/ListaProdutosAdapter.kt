@@ -43,6 +43,7 @@ class ListaProdutosAdapter(
             binding.imageView.load(produto.imagem) {
                 fallback(R.drawable.erro)
                 error(R.drawable.erro)
+                placeholder(R.drawable.placeholder)
             }
         }
 
