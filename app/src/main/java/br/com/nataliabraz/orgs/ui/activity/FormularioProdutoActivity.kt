@@ -4,15 +4,14 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.dao.ProdutosDAO
 import br.com.nataliabraz.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.nataliabraz.orgs.databinding.FormularioImagemBinding
+import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
-import coil.load
 import java.math.BigDecimal
 
 class FormularioProdutoActivity : AppCompatActivity() {
@@ -42,18 +41,16 @@ class FormularioProdutoActivity : AppCompatActivity() {
             val bindingFormularioImagem = FormularioImagemBinding.inflate(layoutInflater)
             bindingFormularioImagem.formularioImagemBotaoCarregar.setOnClickListener {
                 val url = bindingFormularioImagem.formularioImagemUrl.text.toString()
-                bindingFormularioImagem.formularioImagemImageview.load(url, imageLoader)
+                val formularioImagem = bindingFormularioImagem.formularioImagemImageview
+                carregar(this, formularioImagem, url)
             }
 
             AlertDialog.Builder(this)
                 .setView(bindingFormularioImagem.root)
                 .setPositiveButton("Confirmar") { _, _->
                     url = bindingFormularioImagem.formularioImagemUrl.text.toString()
-                    binding.activityFormularioProdutoImagem.load(url, imageLoader) {
-                        fallback(R.drawable.erro)
-                        error(R.drawable.erro)
-                        placeholder(R.drawable.placeholder)
-                    }
+                    val produtoImagem = binding.activityFormularioProdutoImagem
+                    carregar(this, produtoImagem, url)
                 }
                 .setNegativeButton("Cancelar") {_, _->
 

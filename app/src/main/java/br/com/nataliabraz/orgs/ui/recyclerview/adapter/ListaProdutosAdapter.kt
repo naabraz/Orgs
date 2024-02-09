@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.databinding.ProdutoItemBinding
+import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
-import coil.load
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
@@ -20,7 +19,10 @@ class ListaProdutosAdapter(
 
     private val produtos = produtos.toMutableList()
 
-    class ViewHolder(private val binding: ProdutoItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(
+        private val context: Context,
+        private val binding: ProdutoItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun vincula(produto: Produto) {
             val nome = binding.produtoItemNome
             nome.text = produto.nome
@@ -40,11 +42,8 @@ class ListaProdutosAdapter(
 
             binding.imageView.visibility = visibilidade
 
-            binding.imageView.load(produto.imagem) {
-                fallback(R.drawable.erro)
-                error(R.drawable.erro)
-                placeholder(R.drawable.placeholder)
-            }
+            val imageView = binding.imageView
+            carregar(context, imageView, produto.imagem)
         }
 
         private fun formataParaMoedaBrasileira(valor: BigDecimal): String {
@@ -60,7 +59,7 @@ class ListaProdutosAdapter(
             false
         )
 
-        return ViewHolder(binding)
+        return ViewHolder(context, binding)
     }
 
     override fun getItemCount(): Int = produtos.size
