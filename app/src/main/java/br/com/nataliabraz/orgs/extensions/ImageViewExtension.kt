@@ -9,7 +9,7 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.load
 
-fun carregar(context: Context, imageView: ImageView, imagem: String?) {
+fun ImageView.carregar(context: Context, imagem: String?) {
     val imageLoader = ImageLoader.Builder(context)
         .components {
             if (Build.VERSION.SDK_INT >= 28) {
@@ -20,7 +20,7 @@ fun carregar(context: Context, imageView: ImageView, imagem: String?) {
         }
         .build()
 
-    imageView.load(imagem, imageLoader) {
+    load(imagem, imageLoader) {
         fallback(R.drawable.erro)
         error(R.drawable.erro)
         placeholder(R.drawable.placeholder)

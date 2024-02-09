@@ -41,9 +41,7 @@ class ListaProdutosAdapter(
             }
 
             binding.imageView.visibility = visibilidade
-
-            val imageView = binding.imageView
-            carregar(context, imageView, produto.imagem)
+            binding.imageView.carregar(context, produto.imagem)
         }
 
         private fun formataParaMoedaBrasileira(valor: BigDecimal): String {
