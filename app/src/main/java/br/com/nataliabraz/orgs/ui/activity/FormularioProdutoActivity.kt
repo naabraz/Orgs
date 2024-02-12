@@ -1,11 +1,9 @@
 package br.com.nataliabraz.orgs.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.nataliabraz.orgs.dao.ProdutosDAO
 import br.com.nataliabraz.orgs.databinding.ActivityFormularioProdutoBinding
-import br.com.nataliabraz.orgs.databinding.FormularioImagemBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.dialog.FormularioImagemDialog
@@ -24,7 +22,10 @@ class FormularioProdutoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.activityFormularioProdutoImagem.setOnClickListener {
-            FormularioImagemDialog(this).mostrar()
+            FormularioImagemDialog(this).mostrar { imagem ->
+                url = imagem
+                binding.activityFormularioProdutoImagem.carregar(this, url)
+            }
         }
     }
 
