@@ -22,7 +22,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.activityFormularioProdutoImagem.setOnClickListener {
-            FormularioImagemDialog(this).mostrar { imagem ->
+            FormularioImagemDialog(this).mostrar(url) { imagem ->
                 url = imagem
                 binding.activityFormularioProdutoImagem.carregar(this, url)
             }
