@@ -47,8 +47,7 @@ class ListaProdutosAdapter(
             binding.imageView.carregar(context, produto.imagem)
 
             binding.produtoItemCard.setOnClickListener {
-                Log.i("===ListaProdutosAdapter", "vincula: ")
-                vaiParaDetalhes()
+                vaiParaDetalhes(produto)
             }
         }
 
@@ -57,8 +56,10 @@ class ListaProdutosAdapter(
             return formatador.format(valor)
         }
 
-        private fun vaiParaDetalhes() {
-            val intent = Intent(context, DetalhesProdutoActivity::class.java)
+        private fun vaiParaDetalhes(produto: Produto) {
+            val intent = Intent(context, DetalhesProdutoActivity::class.java).apply {
+                putExtra("produto", produto)
+            }
             context.startActivity(intent)
         }
     }
