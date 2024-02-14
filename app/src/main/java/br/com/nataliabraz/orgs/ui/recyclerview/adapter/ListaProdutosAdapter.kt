@@ -48,7 +48,7 @@ class ListaProdutosAdapter(
 
             binding.produtoItemCard.setOnClickListener {
                 Log.i("===ListaProdutosAdapter", "vincula: ")
-                vaiParaDetalhesProduto()
+                vaiParaDetalhes()
             }
         }
 
@@ -57,7 +57,7 @@ class ListaProdutosAdapter(
             return formatador.format(valor)
         }
 
-        private fun vaiParaDetalhesProduto() {
+        private fun vaiParaDetalhes() {
             val intent = Intent(context, DetalhesProdutoActivity::class.java)
             context.startActivity(intent)
         }
