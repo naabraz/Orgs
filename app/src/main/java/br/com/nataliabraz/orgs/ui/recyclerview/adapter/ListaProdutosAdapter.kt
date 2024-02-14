@@ -1,6 +1,8 @@
 package br.com.nataliabraz.orgs.ui.recyclerview.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.nataliabraz.orgs.databinding.ProdutoItemBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
+import br.com.nataliabraz.orgs.ui.activity.DetalhesProdutoActivity
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
@@ -42,11 +45,21 @@ class ListaProdutosAdapter(
 
             binding.imageView.visibility = visibilidade
             binding.imageView.carregar(context, produto.imagem)
+
+            binding.produtoItemCard.setOnClickListener {
+                Log.i("===ListaProdutosAdapter", "vincula: ")
+                vaiParaDetalhesProduto()
+            }
         }
 
         private fun formataParaMoedaBrasileira(valor: BigDecimal): String {
             val formatador = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
             return formatador.format(valor)
+        }
+
+        private fun vaiParaDetalhesProduto() {
+            val intent = Intent(context, DetalhesProdutoActivity::class.java)
+            context.startActivity(intent)
         }
     }
 
