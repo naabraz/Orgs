@@ -6,6 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.firebase-perf")
+    id("kotlin-parcelize")
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
