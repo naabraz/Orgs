@@ -10,9 +10,7 @@ import br.com.nataliabraz.orgs.databinding.ProdutoItemBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.activity.DetalhesProdutoActivity
-import java.math.BigDecimal
-import java.text.NumberFormat
-import java.util.Locale
+import br.com.nataliabraz.orgs.ui.formatter.formataParaMoedaBrasileira
 
 class ListaProdutosAdapter(
     private val context: Context,
@@ -48,11 +46,6 @@ class ListaProdutosAdapter(
             binding.produtoItemCard.setOnClickListener {
                 vaiParaDetalhes(produto)
             }
-        }
-
-        private fun formataParaMoedaBrasileira(valor: BigDecimal): String {
-            val formatador = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
-            return formatador.format(valor)
         }
 
         private fun vaiParaDetalhes(produto: Produto) {
