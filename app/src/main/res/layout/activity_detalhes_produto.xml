@@ -27,12 +27,12 @@
             android:id="@+id/activity_detalhe_produto_valor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:fontFamily="@font/montserrat_bold"
             android:textColor="@android:color/holo_green_dark"
             android:textSize="24sp"
             android:theme="@style/Theme.MaterialComponents.Light"
             app:layout_constraintBottom_toBottomOf="@id/activity_detalhe_produto_imagem"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/activity_detalhe_produto_imagem"
             tools:text="R$ 19.99" />
