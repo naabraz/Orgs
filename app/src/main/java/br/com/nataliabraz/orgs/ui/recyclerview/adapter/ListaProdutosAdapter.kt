@@ -8,22 +8,35 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nataliabraz.orgs.databinding.ProdutoItemBinding
 import br.com.nataliabraz.orgs.extensions.carregar
+import br.com.nataliabraz.orgs.extensions.formataParaMoedaBrasileira
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.activity.DetalhesProdutoActivity
-import br.com.nataliabraz.orgs.ui.formatter.formataParaMoedaBrasileira
 
 class ListaProdutosAdapter(
     private val context: Context,
-    produtos: List<Produto>
+    produtos: List<Produto>,
+    var quandoClicaNoItem: (produto: Produto) -> Unit = {}
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
 
-    class ViewHolder(
+    inner class ViewHolder(
         private val context: Context,
         private val binding: ProdutoItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        private lateinit var produto: Produto
+
+        init {
+            itemView.setOnClickListener {
+                if (::produto.isInitialized) {
+                    quandoClicaNoItem(produto)
+                }
+            }
+        }
+
         fun vincula(produto: Produto) {
+            this.produto = produto
             val nome = binding.produtoItemNome
             nome.text = produto.nome
 
@@ -31,7 +44,7 @@ class ListaProdutosAdapter(
             descricao.text = produto.descricao
 
             val valor = binding.produtoItemValor
-            val valorEmMoeda = formataParaMoedaBrasileira(produto.valor)
+            val valorEmMoeda = produto.valor.formataParaMoedaBrasileira()
             valor.text = valorEmMoeda
 
             val visibilidade = if (produto.imagem != null) {
