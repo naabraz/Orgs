@@ -3,23 +3,17 @@ package br.com.nataliabraz.orgs.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
-import br.com.nataliabraz.orgs.dao.ProdutosDAO
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
-import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import java.math.BigDecimal
 
 class ListaProdutosActivity : AppCompatActivity() {
-    private val dao = ProdutosDAO()
-
     private val binding by lazy {
         ActivityListaProdutosBinding.inflate(layoutInflater)
     }
 
     private val adapter by lazy {
-        ListaProdutosAdapter(context = this, produtos = dao.buscaTodos())
+        ListaProdutosAdapter(context = this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +22,6 @@ class ListaProdutosActivity : AppCompatActivity() {
 
         configuraRecyclerView()
         configuraFab()
-
-        val db = AppDatabase.instancia(this)
-        val produtoDao = db.produtoDao()
-
-        adapter.atualiza(produtoDao.buscaTodos())
     }
 
     override fun onResume() {
