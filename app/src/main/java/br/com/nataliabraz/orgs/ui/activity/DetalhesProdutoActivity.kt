@@ -2,7 +2,9 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.databinding.ActivityDetalhesProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.extensions.formataParaMoedaBrasileira
@@ -17,6 +19,11 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         tentaCarregarProduto(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_detalhes_produto, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun tentaCarregarProduto(context: Context) {
