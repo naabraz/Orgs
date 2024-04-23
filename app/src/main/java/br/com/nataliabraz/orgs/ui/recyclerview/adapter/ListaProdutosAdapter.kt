@@ -2,6 +2,7 @@ package br.com.nataliabraz.orgs.ui.recyclerview.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -63,13 +64,26 @@ class ListaProdutosAdapter(
                 vaiParaDetalhes(produto)
             }
 
-            binding.produtoItemCard.setOnLongClickListener {
-                val popup = PopupMenu(context, it)
+            binding.produtoItemCard.setOnLongClickListener { produtoItem ->
+                val popup = PopupMenu(context, produtoItem)
                 val inflater: MenuInflater = popup.menuInflater
 
                 inflater.inflate(R.menu.menu_detalhes_produto, popup.menu)
 
                 popup.show()
+
+                popup.setOnMenuItemClickListener { menuItem ->
+                    when(menuItem.itemId) {
+                        R.id.menu_detalhes_produto_remover -> {
+                            Log.i("ListaProdutos", "popUp onOptionsItemSelected: remover")
+                        }
+                        R.id.menu_detalhes_produto_editar -> {
+                            Log.i("ListaProdutos", "popUp onOptionsItemSelected: editar")
+                        }
+                    }
+
+                    true
+                }
 
                 true
             }
