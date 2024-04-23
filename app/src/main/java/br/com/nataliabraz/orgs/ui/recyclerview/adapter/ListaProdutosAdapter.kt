@@ -3,9 +3,12 @@ package br.com.nataliabraz.orgs.ui.recyclerview.adapter
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.databinding.ProdutoItemBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.extensions.formataParaMoedaBrasileira
@@ -58,6 +61,17 @@ class ListaProdutosAdapter(
 
             binding.produtoItemCard.setOnClickListener {
                 vaiParaDetalhes(produto)
+            }
+
+            binding.produtoItemCard.setOnLongClickListener {
+                val popup = PopupMenu(context, it)
+                val inflater: MenuInflater = popup.menuInflater
+
+                inflater.inflate(R.menu.menu_detalhes_produto, popup.menu)
+
+                popup.show()
+
+                true
             }
         }
 
