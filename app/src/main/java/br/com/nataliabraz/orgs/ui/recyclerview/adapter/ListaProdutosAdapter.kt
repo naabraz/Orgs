@@ -2,7 +2,7 @@ package br.com.nataliabraz.orgs.ui.recyclerview.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -26,7 +26,7 @@ class ListaProdutosAdapter(
     inner class ViewHolder(
         private val context: Context,
         private val binding: ProdutoItemBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root), PopupMenu.OnMenuItemClickListener {
 
         private lateinit var produto: Produto
 
@@ -36,8 +36,12 @@ class ListaProdutosAdapter(
                     quandoClicaNoItem(produto)
                 }
             }
-            itemView.setOnLongClickListener {produtoItem ->
-                openPopUpMenu(produtoItem)
+
+            itemView.setOnLongClickListener {
+                PopupMenu(context, itemView).apply {
+                    menuInflater.inflate(R.menu.menu_detalhes_produto, menu)
+                    setOnMenuItemClickListener(this@ViewHolder)
+                }.show()
                 true
             }
         }
@@ -64,25 +68,18 @@ class ListaProdutosAdapter(
             binding.imageView.carregar(context, produto.imagem)
         }
 
-        private fun openPopUpMenu(produtoItem: View) {
-            val popup = PopupMenu(context, produtoItem)
-            val inflater: MenuInflater = popup.menuInflater
-
-            inflater.inflate(R.menu.menu_detalhes_produto, popup.menu)
-
-            popup.show()
-
-            popup.setOnMenuItemClickListener { menuItem ->
-                when(menuItem.itemId) {
-                    R.id.menu_detalhes_produto_remover -> {
-                        quandoClicaEmRemover(produto)
-                    }
+        override fun onMenuItemClick(item: MenuItem?): Boolean {
+            item?.let {
+                when(it.itemId) {
                     R.id.menu_detalhes_produto_editar -> {
                         quandoClicaEmEditar(produto)
                     }
+                    R.id.menu_detalhes_produto_remover -> {
+                        quandoClicaEmRemover(produto)
+                    }
                 }
-                true
             }
+            return true
         }
     }
 
