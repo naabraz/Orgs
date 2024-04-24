@@ -75,16 +75,14 @@ class ListaProdutosAdapter(
                 popup.setOnMenuItemClickListener { menuItem ->
                     when(menuItem.itemId) {
                         R.id.menu_detalhes_produto_remover -> {
-                            Log.i("ListaProdutos", "popUp onOptionsItemSelected: remover")
+                            removeProduto(produto)
                         }
                         R.id.menu_detalhes_produto_editar -> {
-                            Log.i("ListaProdutos", "popUp onOptionsItemSelected: editar")
+                            editaProduto(produto)
                         }
                     }
-
                     true
                 }
-
                 true
             }
         }
@@ -94,6 +92,14 @@ class ListaProdutosAdapter(
                 putExtra("produto", produto)
             }
             context.startActivity(intent)
+        }
+
+        private fun removeProduto(produto: Produto) {
+            Log.i("ListaProdutos", "removeProduto: ${produto}")
+        }
+
+        private fun editaProduto(produto: Produto) {
+            Log.i("ListaProdutos", "editaProduto: ${produto}")
         }
     }
 
