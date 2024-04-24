@@ -2,6 +2,7 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
@@ -57,6 +58,14 @@ class ListaProdutosActivity : AppCompatActivity() {
                 putExtra(CHAVE_PRODUTO, it)
             }
             startActivity(intent)
+        }
+
+        adapter.quandoClicaEmEditar = { produto ->
+            Log.i("ListaProdutosActivity", "configuraRecyclerView: Editar ${produto}")
+        }
+
+        adapter.quandoClicaEmRemover = { produto ->
+            Log.i("ListaProdutosActivity", "configuraRecyclerView: Remover ${produto}")
         }
     }
 }

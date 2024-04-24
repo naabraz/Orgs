@@ -1,8 +1,6 @@
 package br.com.nataliabraz.orgs.ui.recyclerview.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -14,12 +12,13 @@ import br.com.nataliabraz.orgs.databinding.ProdutoItemBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.extensions.formataParaMoedaBrasileira
 import br.com.nataliabraz.orgs.model.Produto
-import br.com.nataliabraz.orgs.ui.activity.DetalhesProdutoActivity
 
 class ListaProdutosAdapter(
     private val context: Context,
     produtos: List<Produto> = emptyList(),
-    var quandoClicaNoItem: (produto: Produto) -> Unit = {}
+    var quandoClicaNoItem: (produto: Produto) -> Unit = {},
+    var quandoClicaEmEditar: (produto: Produto) -> Unit = {},
+    var quandoClicaEmRemover: (produto: Produto) -> Unit = {}
 ) : RecyclerView.Adapter<ListaProdutosAdapter.ViewHolder>() {
 
     private val produtos = produtos.toMutableList()
@@ -36,6 +35,10 @@ class ListaProdutosAdapter(
                 if (::produto.isInitialized) {
                     quandoClicaNoItem(produto)
                 }
+            }
+            itemView.setOnLongClickListener {produtoItem ->
+                openPopUpMenu(produtoItem)
+                true
             }
         }
 
@@ -59,47 +62,27 @@ class ListaProdutosAdapter(
 
             binding.imageView.visibility = visibilidade
             binding.imageView.carregar(context, produto.imagem)
+        }
 
-            binding.produtoItemCard.setOnClickListener {
-                vaiParaDetalhes(produto)
-            }
+        private fun openPopUpMenu(produtoItem: View) {
+            val popup = PopupMenu(context, produtoItem)
+            val inflater: MenuInflater = popup.menuInflater
 
-            binding.produtoItemCard.setOnLongClickListener { produtoItem ->
-                val popup = PopupMenu(context, produtoItem)
-                val inflater: MenuInflater = popup.menuInflater
+            inflater.inflate(R.menu.menu_detalhes_produto, popup.menu)
 
-                inflater.inflate(R.menu.menu_detalhes_produto, popup.menu)
+            popup.show()
 
-                popup.show()
-
-                popup.setOnMenuItemClickListener { menuItem ->
-                    when(menuItem.itemId) {
-                        R.id.menu_detalhes_produto_remover -> {
-                            removeProduto(produto)
-                        }
-                        R.id.menu_detalhes_produto_editar -> {
-                            editaProduto(produto)
-                        }
+            popup.setOnMenuItemClickListener { menuItem ->
+                when(menuItem.itemId) {
+                    R.id.menu_detalhes_produto_remover -> {
+                        quandoClicaEmRemover(produto)
                     }
-                    true
+                    R.id.menu_detalhes_produto_editar -> {
+                        quandoClicaEmEditar(produto)
+                    }
                 }
                 true
             }
-        }
-
-        private fun vaiParaDetalhes(produto: Produto) {
-            val intent = Intent(context, DetalhesProdutoActivity::class.java).apply {
-                putExtra("produto", produto)
-            }
-            context.startActivity(intent)
-        }
-
-        private fun removeProduto(produto: Produto) {
-            Log.i("ListaProdutos", "removeProduto: ${produto}")
-        }
-
-        private fun editaProduto(produto: Produto) {
-            Log.i("ListaProdutos", "editaProduto: ${produto}")
         }
     }
 
