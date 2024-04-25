@@ -3,7 +3,6 @@ package br.com.nataliabraz.orgs.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +12,6 @@ import br.com.nataliabraz.orgs.databinding.ActivityDetalhesProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.extensions.formataParaMoedaBrasileira
 import br.com.nataliabraz.orgs.model.Produto
-
-private const val TAG = "DetalhesProduto"
 
 class DetalhesProdutoActivity : AppCompatActivity() {
     private lateinit var produto: Produto
