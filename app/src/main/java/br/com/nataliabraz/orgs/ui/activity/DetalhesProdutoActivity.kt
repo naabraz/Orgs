@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import br.com.nataliabraz.orgs.R
+import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityDetalhesProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.extensions.formataParaMoedaBrasileira
@@ -15,6 +16,7 @@ import br.com.nataliabraz.orgs.model.Produto
 private const val TAG = "DetalhesProduto"
 
 class DetalhesProdutoActivity : AppCompatActivity() {
+    private lateinit var produto: Produto
     private val binding by lazy {
         ActivityDetalhesProdutoBinding.inflate(layoutInflater)
     }
@@ -31,19 +33,27 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.menu_detalhes_produto_remover -> {
-                Log.i(TAG, "onOptionsItemSelected: remover")
-            }
-            R.id.menu_detalhes_produto_editar -> {
-                Log.i(TAG, "onOptionsItemSelected: editar")
+        if (::produto.isInitialized) {
+            val db = AppDatabase.instancia(this)
+            val produtoDao = db.produtoDao()
+
+            when(item.itemId) {
+                R.id.menu_detalhes_produto_remover -> {
+                    produtoDao.remove(produto)
+                    finish()
+                }
+                R.id.menu_detalhes_produto_editar -> {
+                    Log.i(TAG, "onOptionsItemSelected: editar")
+                }
             }
         }
+
         return super.onOptionsItemSelected(item)
     }
 
     private fun tentaCarregarProduto(context: Context) {
         intent.getParcelableExtra<Produto>(CHAVE_PRODUTO)?.let { produtoCarregado ->
+            produto = produtoCarregado
             preencheCampos(context, produtoCarregado)
         } ?: finish()
     }
