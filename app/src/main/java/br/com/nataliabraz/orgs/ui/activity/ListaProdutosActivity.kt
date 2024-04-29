@@ -66,13 +66,5 @@ class ListaProdutosActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
-
-        adapter.quandoClicaEmEditar = { produto ->
-            Log.i("ListaProdutosActivity", "configuraRecyclerView: Editar ${produto}")
-        }
-
-        adapter.quandoClicaEmRemover = { produto ->
-            Log.i("ListaProdutosActivity", "configuraRecyclerView: Remover ${produto}")
-        }
     }
 }
