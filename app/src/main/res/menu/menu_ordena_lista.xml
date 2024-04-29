@@ -1,10 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/menu_ordena_lista_filtrar"
         android:icon="@drawable/ic_action_filter"
-        android:title="Item"
-        app:showAsAction="ifRoom" />
+        android:title="Ordenar"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <item
+                android:id="@+id/menu_ordena_lista_filtrar_nome_desc"
+                android:icon="@drawable/ic_action_filter"
+                android:title="Nome desc"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menu_ordena_lista_filtrar_nome_asc"
+                android:icon="@drawable/ic_action_filter"
+                android:title="Nome asc"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menu_ordena_lista_filtrar_descricao_desc"
+                android:icon="@drawable/ic_action_filter"
+                android:title="Descrição desc"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menu_ordena_lista_filtrar_descricao_asc"
+                android:icon="@drawable/ic_action_filter"
+                android:title="Descrição asc"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menu_ordena_lista_filtrar_valor_desc"
+                android:icon="@drawable/ic_action_filter"
+                android:title="Valor desc"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menu_ordena_lista_filtrar_valor_asc"
+                android:icon="@drawable/ic_action_filter"
+                android:title="Valor asc"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menu_ordena_lista_filtrar_sem_ordenacao"
+                android:icon="@drawable/ic_action_filter"
+                android:title="Sem ordenação"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
 </menu>
