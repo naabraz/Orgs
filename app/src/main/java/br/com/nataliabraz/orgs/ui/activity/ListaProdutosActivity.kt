@@ -3,7 +3,9 @@ package br.com.nataliabraz.orgs.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
@@ -32,6 +34,11 @@ class ListaProdutosActivity : AppCompatActivity() {
         val produtoDao = db.produtoDao()
 
         adapter.atualiza(produtoDao.buscaTodos())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_ordena_lista, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun configuraFab() {
