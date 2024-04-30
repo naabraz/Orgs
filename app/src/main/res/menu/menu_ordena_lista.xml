@@ -4,51 +4,37 @@
     <item
         android:id="@+id/menu_ordena_lista_filtrar"
         android:icon="@drawable/ic_action_filter"
-        android:title="Ordenar"
+        android:title="@string/ordenar"
         app:showAsAction="ifRoom">
 
         <menu>
             <item
                 android:id="@+id/menu_ordena_lista_filtrar_nome_desc"
-                android:icon="@drawable/ic_action_filter"
-                android:title="Nome desc"
-                app:showAsAction="ifRoom" />
+                android:title="@string/nome_desc" />
 
             <item
                 android:id="@+id/menu_ordena_lista_filtrar_nome_asc"
-                android:icon="@drawable/ic_action_filter"
-                android:title="Nome asc"
-                app:showAsAction="ifRoom" />
+                android:title="@string/nome_asc" />
 
             <item
                 android:id="@+id/menu_ordena_lista_filtrar_descricao_desc"
-                android:icon="@drawable/ic_action_filter"
-                android:title="Descrição desc"
-                app:showAsAction="ifRoom" />
+                android:title="@string/descricao_desc" />
 
             <item
                 android:id="@+id/menu_ordena_lista_filtrar_descricao_asc"
-                android:icon="@drawable/ic_action_filter"
-                android:title="Descrição asc"
-                app:showAsAction="ifRoom" />
+                android:title="@string/descricao_asc" />
 
             <item
                 android:id="@+id/menu_ordena_lista_filtrar_valor_desc"
-                android:icon="@drawable/ic_action_filter"
-                android:title="Valor desc"
-                app:showAsAction="ifRoom" />
+                android:title="@string/valor_desc" />
 
             <item
                 android:id="@+id/menu_ordena_lista_filtrar_valor_asc"
-                android:icon="@drawable/ic_action_filter"
-                android:title="Valor asc"
-                app:showAsAction="ifRoom" />
+                android:title="@string/valor_asc" />
 
             <item
                 android:id="@+id/menu_ordena_lista_filtrar_sem_ordenacao"
-                android:icon="@drawable/ic_action_filter"
-                android:title="Sem ordenação"
-                app:showAsAction="ifRoom" />
+                android:title="@string/sem_ordenacao" />
         </menu>
     </item>
 </menu>
