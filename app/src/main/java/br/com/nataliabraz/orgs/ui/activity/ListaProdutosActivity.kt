@@ -2,6 +2,7 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,9 @@ import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class ListaProdutosActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -27,8 +31,22 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
 
+        runBlocking {
+            Log.i("===ListaProdutos", "onCreate: runBlocking init")
+
+            repeat(100) {
+                launch {
+                    Log.i("===ListaProdutos", "onCreate: launch init $it")
+                    delay(3000L)
+                    Log.i("===ListaProdutos", "onCreate: launch finish $it")
+                }
+            }
+
+            Log.i("===ListaProdutos", "onCreate: runBlocking finish")
+        }
+
+        setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
     }
