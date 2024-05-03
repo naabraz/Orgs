@@ -12,6 +12,11 @@ import br.com.nataliabraz.orgs.databinding.ActivityDetalhesProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.extensions.formataParaMoedaBrasileira
 import br.com.nataliabraz.orgs.model.Produto
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetalhesProdutoActivity : AppCompatActivity() {
     private var produtoId: Long = 0L
@@ -25,6 +30,8 @@ class DetalhesProdutoActivity : AppCompatActivity() {
         AppDatabase.instancia(this).produtoDao()
     }
 
+    private val scope = CoroutineScope(IO)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -34,14 +41,20 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        buscaProduto()
+        buscaProduto(this)
     }
 
-    private fun buscaProduto() {
-        produto = produtoDao.buscaPorId(produtoId)
-        produto?.let {
-            preencheCampos(this, it)
-        } ?: finish()
+    private fun buscaProduto(context: Context) {
+        scope.launch {
+            produto = produtoDao.buscaPorId(produtoId)
+
+            /* Garante que a atualização da tela seja executada na main thread */
+            withContext(Main) {
+                produto?.let {
+                    preencheCampos(context, it)
+                } ?: finish()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -52,9 +65,11 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.menu_detalhes_produto_remover -> {
-                produto?.let {
-                    produtoDao.remove(it)
-                    finish()
+                scope.launch {
+                    produto?.let {
+                        produtoDao.remove(it)
+                        finish()
+                    }
                 }
             }
             R.id.menu_detalhes_produto_editar -> {
