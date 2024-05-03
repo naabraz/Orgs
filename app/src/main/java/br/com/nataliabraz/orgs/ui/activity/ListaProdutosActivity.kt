@@ -11,9 +11,12 @@ import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class ListaProdutosActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -32,20 +35,6 @@ class ListaProdutosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        runBlocking {
-            Log.i("===ListaProdutos", "onCreate: runBlocking init")
-
-            repeat(100) {
-                launch {
-                    Log.i("===ListaProdutos", "onCreate: launch init $it")
-                    delay(3000L)
-                    Log.i("===ListaProdutos", "onCreate: launch finish $it")
-                }
-            }
-
-            Log.i("===ListaProdutos", "onCreate: runBlocking finish")
-        }
-
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
@@ -53,8 +42,14 @@ class ListaProdutosActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val scope = MainScope()
 
-        adapter.atualiza(produtoDao.buscaTodos())
+        scope.launch {
+            val produtos = withContext(Dispatchers.IO) {
+                produtoDao.buscaTodos()
+            }
+            adapter.atualiza(produtos)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
