@@ -13,8 +13,11 @@ import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -33,6 +36,8 @@ class ListaProdutosActivity : AppCompatActivity() {
         val db = AppDatabase.instancia(this)
         db.produtoDao()
     }
+
+    private val job = Job() /* Pode ser compartilhado entre coroutines */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +60,18 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
 
         val scope = MainScope()
+
+        scope.launch(job) {
+            Log.i("ListaProdutosActivity", "onResume: contexto da coroutine $coroutineContext")
+
+            repeat(1000) {
+                Log.i("ListaProdutosActivity", "onResume: coroutine em execucao $it")
+                delay(1000)
+            }
+        }
+
         scope.launch(handler) {
+            delay(1000)
 //            throw Exception("Lançando exception na coroutine")
             val produtos = withContext(Dispatchers.IO) {
                 produtoDao.buscaTodos()
@@ -63,6 +79,11 @@ class ListaProdutosActivity : AppCompatActivity() {
 
             adapter.atualiza(produtos)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
