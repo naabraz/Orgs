@@ -41,17 +41,17 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        buscaProduto(this)
+        buscaProduto()
     }
 
-    private fun buscaProduto(context: Context) {
+    private fun buscaProduto() {
         scope.launch {
             produto = produtoDao.buscaPorId(produtoId)
 
             /* Garante que a atualização da tela seja executada na main thread */
             withContext(Main) {
                 produto?.let {
-                    preencheCampos(context, it)
+                    preencheCampos(this@DetalhesProdutoActivity, it)
                 } ?: finish()
             }
         }
