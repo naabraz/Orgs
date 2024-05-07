@@ -2,26 +2,16 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 class ListaProdutosActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -37,8 +27,6 @@ class ListaProdutosActivity : AppCompatActivity() {
         db.produtoDao()
     }
 
-    private val job = Job() /* Pode ser compartilhado entre coroutines */
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,40 +38,11 @@ class ListaProdutosActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val handler = CoroutineExceptionHandler { coroutineContext, throwable ->
-            Log.i("ListaProdutosActivity", "onResume: throwable $throwable")
-            Toast.makeText(
-                this@ListaProdutosActivity,
-                "Ocorreu um problema",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-
-        val scope = MainScope()
-
-        scope.launch(job) {
-            Log.i("ListaProdutosActivity", "onResume: contexto da coroutine $coroutineContext")
-
-            repeat(1000) {
-                Log.i("ListaProdutosActivity", "onResume: coroutine em execucao $it")
-                delay(1000)
-            }
-        }
-
-        scope.launch(handler) {
-            delay(1000)
-//            throw Exception("Lançando exception na coroutine")
-            val produtos = withContext(Dispatchers.IO) {
-                produtoDao.buscaTodos()
-            }
+        lifecycleScope.launch {
+            val produtos = produtoDao.buscaTodos()
 
             adapter.atualiza(produtos)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -92,40 +51,42 @@ class ListaProdutosActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val produtosOrdenados: List<Produto>? = when (item.itemId) {
-            R.id.menu_ordena_lista_filtrar_nome_asc -> {
-                produtoDao.ordenaPorNomeAsc()
+        lifecycleScope.launch {
+            val produtosOrdenados: List<Produto>? = when (item.itemId) {
+                R.id.menu_ordena_lista_filtrar_nome_asc -> {
+                    produtoDao.ordenaPorNomeAsc()
+                }
+
+                R.id.menu_ordena_lista_filtrar_nome_desc -> {
+                    produtoDao.ordenaPorNomeDesc()
+                }
+
+                R.id.menu_ordena_lista_filtrar_descricao_asc -> {
+                    produtoDao.ordenaPorDescricaoAsc()
+                }
+
+                R.id.menu_ordena_lista_filtrar_descricao_desc -> {
+                    produtoDao.ordenaPorDescricaoDesc()
+                }
+
+                R.id.menu_ordena_lista_filtrar_valor_asc -> {
+                    produtoDao.ordenaPorValorAsc()
+                }
+
+                R.id.menu_ordena_lista_filtrar_valor_desc -> {
+                    produtoDao.ordenaPorValorDesc()
+                }
+
+                R.id.menu_ordena_lista_filtrar_sem_ordenacao -> {
+                    produtoDao.buscaTodos()
+                }
+
+                else -> null
             }
 
-            R.id.menu_ordena_lista_filtrar_nome_desc -> {
-                produtoDao.ordenaPorNomeDesc()
+            produtosOrdenados?.let {
+                adapter.atualiza(it)
             }
-
-            R.id.menu_ordena_lista_filtrar_descricao_asc -> {
-                produtoDao.ordenaPorDescricaoAsc()
-            }
-
-            R.id.menu_ordena_lista_filtrar_descricao_desc -> {
-                produtoDao.ordenaPorDescricaoDesc()
-            }
-
-            R.id.menu_ordena_lista_filtrar_valor_asc -> {
-                produtoDao.ordenaPorValorAsc()
-            }
-
-            R.id.menu_ordena_lista_filtrar_valor_desc -> {
-                produtoDao.ordenaPorValorDesc()
-            }
-
-            R.id.menu_ordena_lista_filtrar_sem_ordenacao -> {
-                produtoDao.buscaTodos()
-            }
-
-            else -> null
-        }
-
-        produtosOrdenados?.let {
-            adapter.atualiza(it)
         }
 
         return super.onOptionsItemSelected(item)

@@ -6,17 +6,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityDetalhesProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.extensions.formataParaMoedaBrasileira
 import br.com.nataliabraz.orgs.model.Produto
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DetalhesProdutoActivity : AppCompatActivity() {
     private var produtoId: Long = 0L
@@ -29,8 +26,6 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     private val produtoDao by lazy {
         AppDatabase.instancia(this).produtoDao()
     }
-
-    private val scope = CoroutineScope(IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,15 +40,11 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     }
 
     private fun buscaProduto() {
-        scope.launch {
+        lifecycleScope.launch {
             produto = produtoDao.buscaPorId(produtoId)
-
-            /* Garante que a atualização da tela seja executada na main thread */
-            withContext(Main) {
-                produto?.let {
-                    preencheCampos(this@DetalhesProdutoActivity, it)
-                } ?: finish()
-            }
+            produto?.let {
+                preencheCampos(this@DetalhesProdutoActivity, it)
+            } ?: finish()
         }
     }
 
@@ -65,7 +56,7 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.menu_detalhes_produto_remover -> {
-                scope.launch {
+                lifecycleScope.launch {
                     produto?.let {
                         produtoDao.remove(it)
                         finish()
