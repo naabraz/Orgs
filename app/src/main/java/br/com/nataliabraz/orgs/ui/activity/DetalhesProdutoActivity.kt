@@ -41,10 +41,11 @@ class DetalhesProdutoActivity : AppCompatActivity() {
 
     private fun buscaProduto() {
         lifecycleScope.launch {
-            produto = produtoDao.buscaPorId(produtoId)
-            produto?.let {
-                preencheCampos(this@DetalhesProdutoActivity, it)
-            } ?: finish()
+            produtoDao.buscaPorId(produtoId).collect { produto ->
+                produto?.let {
+                    preencheCampos(this@DetalhesProdutoActivity, it)
+                } ?: finish()
+            }
         }
     }
 

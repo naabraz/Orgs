@@ -2,6 +2,7 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,9 @@ import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ListaProdutosActivity : AppCompatActivity() {
@@ -33,16 +37,16 @@ class ListaProdutosActivity : AppCompatActivity() {
         setContentView(binding.root)
         configuraRecyclerView()
         configuraFab()
+
+        lifecycleScope.launch {
+            produtoDao.buscaTodos().collect { produtos ->
+                adapter.atualiza(produtos)
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
-
-        lifecycleScope.launch {
-            val produtos = produtoDao.buscaTodos()
-
-            adapter.atualiza(produtos)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -77,9 +81,13 @@ class ListaProdutosActivity : AppCompatActivity() {
                     produtoDao.ordenaPorValorDesc()
                 }
 
-                R.id.menu_ordena_lista_filtrar_sem_ordenacao -> {
-                    produtoDao.buscaTodos()
-                }
+//                R.id.menu_ordena_lista_filtrar_sem_ordenacao -> {
+//                    // produtoDao.buscaTodos()
+//
+//                    lifecycleScope.launch {
+//                        produtoDao.buscaTodos().collect { produtos }
+//                    }
+//                }
 
                 else -> null
             }

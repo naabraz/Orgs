@@ -9,6 +9,7 @@ import br.com.nataliabraz.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.dialog.FormularioImagemDialog
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -53,8 +54,10 @@ class FormularioProdutoActivity : AppCompatActivity() {
 
     private fun tentaBuscarProduto() {
         lifecycleScope.launch {
-            produtoDao.buscaPorId(produtoId)?.let {
-                preencheCampos(it)
+            produtoDao.buscaPorId(produtoId).collect { produto ->
+                produto?.let {
+                    preencheCampos(produto)
+                } ?: finish()
             }
         }
     }
