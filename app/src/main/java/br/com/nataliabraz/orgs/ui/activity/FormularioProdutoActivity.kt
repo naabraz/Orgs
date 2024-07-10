@@ -57,7 +57,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
             produtoDao.buscaPorId(produtoId).collect { produto ->
                 produto?.let {
                     preencheCampos(produto)
-                } ?: finish()
+                }
             }
         }
     }
