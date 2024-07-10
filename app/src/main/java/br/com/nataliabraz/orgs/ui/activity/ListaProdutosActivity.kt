@@ -2,7 +2,6 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +11,6 @@ import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ListaProdutosActivity : AppCompatActivity() {
