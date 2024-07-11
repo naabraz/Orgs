@@ -35,13 +35,13 @@ class DetalhesProdutoActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         buscaProduto()
     }
 
     private fun buscaProduto() {
         lifecycleScope.launch {
-            produtoDao.buscaPorId(produtoId).collect { produto ->
+            produtoDao.buscaPorId(produtoId).collect { produtoEncontrado ->
+                produto = produtoEncontrado
                 produto?.let {
                     preencheCampos(this@DetalhesProdutoActivity, it)
                 } ?: finish()
@@ -57,8 +57,8 @@ class DetalhesProdutoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.menu_detalhes_produto_remover -> {
-                lifecycleScope.launch {
-                    produto?.let {
+                produto?.let {
+                    lifecycleScope.launch {
                         produtoDao.remove(it)
                         finish()
                     }
