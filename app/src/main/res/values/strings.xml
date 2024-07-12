@@ -21,4 +21,12 @@
     <string name="sem_ordenacao">Sem ordenação</string>
     <string name="editar">Editar</string>
     <string name="remover">Remover</string>
+    <string name="usuario">Usuário</string>
+    <string name="nome_usuario">Nome</string>
+    <string name="senha">Senha</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="orgs">Orgs</string>
+    <string name="app_logo">App Logo</string>
+    <string name="entrar">Entrar</string>
+    <string name="cadastrar_usuario">cadastrar usuário</string>
 </resources>
