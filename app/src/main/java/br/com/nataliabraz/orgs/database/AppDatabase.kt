@@ -7,12 +7,15 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import br.com.nataliabraz.orgs.database.converter.Converters
 import br.com.nataliabraz.orgs.database.dao.ProdutoDao
+import br.com.nataliabraz.orgs.database.dao.UsuarioDao
 import br.com.nataliabraz.orgs.model.Produto
+import br.com.nataliabraz.orgs.model.Usuario
 
-@Database(entities = [Produto::class], version = 1, exportSchema = false)
+@Database(entities = [Produto::class, Usuario::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao
+    abstract fun usuarioDao(): UsuarioDao
 
     companion object {
         @Volatile
