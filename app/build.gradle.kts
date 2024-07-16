@@ -8,6 +8,7 @@ plugins {
     id("com.google.firebase.firebase-perf")
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    id("androidx.room")
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
@@ -30,6 +31,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 
     signingConfigs {
@@ -105,7 +110,7 @@ dependencies {
     implementation("io.coil-kt:coil-gif:2.5.0")
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
 
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies

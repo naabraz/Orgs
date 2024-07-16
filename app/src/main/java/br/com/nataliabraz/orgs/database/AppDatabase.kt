@@ -11,7 +11,11 @@ import br.com.nataliabraz.orgs.database.dao.UsuarioDao
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.model.Usuario
 
-@Database(entities = [Produto::class, Usuario::class], version = 1, exportSchema = false)
+@Database(
+    entities = [Produto::class, Usuario::class],
+    version = 1,
+    exportSchema = true
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao
@@ -28,7 +32,10 @@ abstract class AppDatabase: RoomDatabase() {
                 context,
                 AppDatabase::class.java,
                 "orgs.db"
-            ).build().also {
+            )
+                .fallbackToDestructiveMigration()
+                .build()
+                .also {
                 db = it
             }
         }
