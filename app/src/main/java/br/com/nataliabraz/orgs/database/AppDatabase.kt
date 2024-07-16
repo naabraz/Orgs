@@ -12,14 +12,17 @@ import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.model.Usuario
 
 @Database(
-    entities = [Produto::class, Usuario::class],
+    entities = [
+        Produto::class,
+//        Usuario::class
+    ],
     version = 1,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao
-    abstract fun usuarioDao(): UsuarioDao
+//    abstract fun usuarioDao(): UsuarioDao
 
     companion object {
         @Volatile
@@ -33,7 +36,6 @@ abstract class AppDatabase: RoomDatabase() {
                 AppDatabase::class.java,
                 "orgs.db"
             )
-                .fallbackToDestructiveMigration()
                 .build()
                 .also {
                 db = it
