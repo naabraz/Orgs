@@ -2,6 +2,7 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -23,8 +24,11 @@ class ListaProdutosActivity : AppCompatActivity() {
     }
 
     private val produtoDao by lazy {
-        val db = AppDatabase.instancia(this)
-        db.produtoDao()
+        AppDatabase.instancia(this).produtoDao()
+    }
+
+    private val usuarioDao by lazy {
+        AppDatabase.instancia(this).usuarioDao()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,14 +39,22 @@ class ListaProdutosActivity : AppCompatActivity() {
         configuraFab()
 
         lifecycleScope.launch {
-            produtoDao.buscaTodos().collect { produtos ->
-                adapter.atualiza(produtos)
+            launch {
+                /* Flow needs to be executed on a exclusive launch
+                * because it blocks the coroutine execution since
+                * it always needs to be active to receive live updates
+                * */
+                produtoDao.buscaTodos().collect { produtos ->
+                    adapter.atualiza(produtos)
+                }
+            }
+
+            intent.getStringExtra("CHAVE_USUARIO_ID")?.let { usuarioId ->
+                usuarioDao.buscaPorId(usuarioId).collect { usuario ->
+                    Log.i("ListaProdutosActivity", usuario.id)
+                }
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
