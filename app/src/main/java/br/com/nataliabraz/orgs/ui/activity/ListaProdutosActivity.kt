@@ -11,6 +11,8 @@ import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
 import br.com.nataliabraz.orgs.model.Produto
+import br.com.nataliabraz.orgs.preferences.USUARIO_LOGADO_PREFERENCES
+import br.com.nataliabraz.orgs.preferences.dataStore
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import kotlinx.coroutines.launch
 
@@ -49,9 +51,11 @@ class ListaProdutosActivity : AppCompatActivity() {
                 }
             }
 
-            intent.getStringExtra("CHAVE_USUARIO_ID")?.let { usuarioId ->
-                usuarioDao.buscaPorId(usuarioId).collect { usuario ->
-                    Log.i("ListaProdutosActivity", usuario.id)
+            dataStore.data.collect { preferences ->
+                preferences[USUARIO_LOGADO_PREFERENCES]?.let { usuarioId ->
+                    usuarioDao.buscaPorId(usuarioId).collect { usuario ->
+                        Log.i("ListaProdutosActivity", "onCreate: $usuario")
+                    }
                 }
             }
         }

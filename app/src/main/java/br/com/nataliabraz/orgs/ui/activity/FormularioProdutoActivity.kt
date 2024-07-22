@@ -1,13 +1,17 @@
 package br.com.nataliabraz.orgs.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.database.dao.ProdutoDao
+import br.com.nataliabraz.orgs.database.dao.UsuarioDao
 import br.com.nataliabraz.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
+import br.com.nataliabraz.orgs.preferences.USUARIO_LOGADO_PREFERENCES
+import br.com.nataliabraz.orgs.preferences.dataStore
 import br.com.nataliabraz.orgs.ui.dialog.FormularioImagemDialog
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,9 +24,13 @@ class FormularioProdutoActivity : AppCompatActivity() {
 
     private var url: String? = null
     private var produtoId = 0L
+
     private val produtoDao: ProdutoDao by lazy {
-        val db = AppDatabase.instancia(this)
-        db.produtoDao()
+        AppDatabase.instancia(this).produtoDao()
+    }
+
+    private val usuarioDao: UsuarioDao by lazy {
+        AppDatabase.instancia(this).usuarioDao()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +48,16 @@ class FormularioProdutoActivity : AppCompatActivity() {
         }
 
         tentaCarregarProduto()
+
+        lifecycleScope.launch {
+            dataStore.data.collect { preferences ->
+                preferences[USUARIO_LOGADO_PREFERENCES]?.let { usuarioId ->
+                    usuarioDao.buscaPorId(usuarioId).collect { usuario ->
+                        Log.i("FormularioProdutoActivity", "onCreate: $usuario")
+                    }
+                }
+            }
+        }
     }
 
     private fun tentaCarregarProduto() {
