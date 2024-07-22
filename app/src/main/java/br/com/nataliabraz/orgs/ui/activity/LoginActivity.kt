@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.database.dao.UsuarioDao
 import br.com.nataliabraz.orgs.databinding.ActivityLoginBinding
+import br.com.nataliabraz.orgs.extensions.toHash
 import br.com.nataliabraz.orgs.extensions.vaiPara
 import br.com.nataliabraz.orgs.preferences.USUARIO_LOGADO_PREFERENCES
 import br.com.nataliabraz.orgs.preferences.dataStore
@@ -34,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
     private fun configuraBotaoEntrar() {
         binding.activityLoginBotaoEntrar.setOnClickListener {
             val usuario = binding.activityLoginUsuario.text.toString()
-            val senha = binding.activityLoginSenha.text.toString()
+            val senha = binding.activityLoginSenha.text.toString().toHash()
 
             Log.i("LoginActivity", "onCreate: $usuario - $senha")
 

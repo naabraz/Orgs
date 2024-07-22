@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.database.dao.UsuarioDao
 import br.com.nataliabraz.orgs.databinding.ActivityFormularioCadastroUsuarioBinding
+import br.com.nataliabraz.orgs.extensions.toHash
 import br.com.nataliabraz.orgs.model.Usuario
 import kotlinx.coroutines.launch
 
@@ -52,7 +53,7 @@ class FormularioCadastroUsuarioActivity : AppCompatActivity() {
     private fun criaUsuario(): Usuario {
         val usuario = binding.activityFormularioCadastroUsuario.text.toString()
         val nome = binding.activityFormularioCadastroNome.text.toString()
-        val senha = binding.activityFormularioCadastroSenha.text.toString()
+        val senha = binding.activityFormularioCadastroSenha.text.toString().toHash()
         return Usuario(usuario, nome, senha)
     }
 }
