@@ -6,10 +6,12 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
+import br.com.nataliabraz.orgs.extensions.vaiPara
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.preferences.USUARIO_LOGADO_PREFERENCES
 import br.com.nataliabraz.orgs.preferences.dataStore
@@ -51,23 +53,37 @@ class ListaProdutosActivity : AppCompatActivity() {
                 }
             }
 
-            dataStore.data.collect { preferences ->
-                preferences[USUARIO_LOGADO_PREFERENCES]?.let { usuarioId ->
-                    usuarioDao.buscaPorId(usuarioId).collect { usuario ->
-                        Log.i("ListaProdutosActivity", "onCreate: $usuario")
-                    }
+            launch {
+                dataStore.data.collect { preferences ->
+                    preferences[USUARIO_LOGADO_PREFERENCES]?.let { usuarioId ->
+                        launch {
+                            usuarioDao.buscaPorId(usuarioId).collect { usuario ->
+                                Log.i("ListaProdutosActivity", "onCreate: $usuario")
+                            }
+                        }
+                    } ?: vaiParaLogin()
                 }
             }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_ordena_lista, menu)
+        menuInflater.inflate(R.menu.menu_lista_produtos, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         lifecycleScope.launch {
+            when (item.itemId) {
+                R.id.menu_logout -> {
+                    lifecycleScope.launch {
+                        dataStore.edit { preferences ->
+                            preferences.remove(USUARIO_LOGADO_PREFERENCES)
+                        }
+                    }
+                }
+            }
+
             val produtosOrdenados: List<Produto>? = when (item.itemId) {
                 R.id.menu_ordena_lista_filtrar_nome_asc -> {
                     produtoDao.ordenaPorNomeAsc()
@@ -94,10 +110,10 @@ class ListaProdutosActivity : AppCompatActivity() {
                 }
 
 //                R.id.menu_ordena_lista_filtrar_sem_ordenacao -> {
-//                    // produtoDao.buscaTodos()
-//
 //                    lifecycleScope.launch {
-//                        produtoDao.buscaTodos().collect { produtos }
+//                        produtoDao.buscaTodos().collect { produtos ->
+//                            adapter.atualiza(produtos)
+//                        }
 //                    }
 //                }
 
@@ -122,6 +138,11 @@ class ListaProdutosActivity : AppCompatActivity() {
     private fun vaiParaFormularioProduto() {
         val intent = Intent(this, FormularioProdutoActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun vaiParaLogin() {
+        vaiPara(LoginActivity::class.java)
+        finish()
     }
 
     private fun configuraRecyclerView() {

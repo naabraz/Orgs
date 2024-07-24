@@ -37,4 +37,9 @@
                 android:title="@string/sem_ordenacao" />
         </menu>
     </item>
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/ic_action_logout"
+        android:title="@string/logout"
+        app:showAsAction="ifRoom" />
 </menu>

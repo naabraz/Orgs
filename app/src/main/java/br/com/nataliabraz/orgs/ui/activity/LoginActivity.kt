@@ -40,12 +40,14 @@ class LoginActivity : AppCompatActivity() {
             Log.i("LoginActivity", "onCreate: $usuario - $senha")
 
             lifecycleScope.launch {
-                usuarioDao.autentica(usuario, senha)?.let { usuario ->
+                usuarioDao.autentica(usuario, senha)?.let {
+                    usuario ->
                     dataStore.edit { preferences ->
                         preferences[USUARIO_LOGADO_PREFERENCES] = usuario.id
                     }
 
                     vaiPara(ListaProdutosActivity::class.java)
+                    finish()
                 } ?: Toast.makeText(
                     this@LoginActivity,
                     "Falha na autenticação",
