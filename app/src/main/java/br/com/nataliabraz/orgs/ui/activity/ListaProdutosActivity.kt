@@ -2,7 +2,6 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +15,7 @@ import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.preferences.USUARIO_LOGADO_PREFERENCES
 import br.com.nataliabraz.orgs.preferences.dataStore
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class ListaProdutosActivity : AppCompatActivity() {
@@ -43,27 +43,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         configuraFab()
 
         lifecycleScope.launch {
-            launch {
-                /* Flow needs to be executed on a exclusive launch
-                * because it blocks the coroutine execution since
-                * it always needs to be active to receive live updates
-                * */
-                produtoDao.buscaTodos().collect { produtos ->
-                    adapter.atualiza(produtos)
-                }
-            }
-
-            launch {
-                dataStore.data.collect { preferences ->
-                    preferences[USUARIO_LOGADO_PREFERENCES]?.let { usuarioId ->
-                        launch {
-                            usuarioDao.buscaPorId(usuarioId).collect { usuario ->
-                                Log.i("ListaProdutosActivity", "onCreate: $usuario")
-                            }
-                        }
-                    } ?: vaiParaLogin()
-                }
-            }
+            verificaUsuarioLogado()
         }
     }
 
@@ -77,9 +57,7 @@ class ListaProdutosActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.menu_logout -> {
                     lifecycleScope.launch {
-                        dataStore.edit { preferences ->
-                            preferences.remove(USUARIO_LOGADO_PREFERENCES)
-                        }
+                        deslogaUsuario()
                     }
                 }
             }
@@ -126,6 +104,41 @@ class ListaProdutosActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private suspend fun deslogaUsuario() {
+        dataStore.edit { preferences ->
+            preferences.remove(USUARIO_LOGADO_PREFERENCES)
+        }
+    }
+
+    private suspend fun buscaProdutosUsuario() {
+        produtoDao.buscaTodos().collect { produtos ->
+            adapter.atualiza(produtos)
+        }
+    }
+
+    private suspend fun verificaUsuarioLogado() {
+        dataStore.data.collect { preferences ->
+            preferences[USUARIO_LOGADO_PREFERENCES]?.let { usuarioId ->
+                buscaUsuario(usuarioId)
+            } ?: vaiParaLogin()
+        }
+    }
+
+    private fun ListaProdutosActivity.buscaUsuario(usuarioId: String) {
+        lifecycleScope.launch {
+            usuarioDao.buscaPorId(usuarioId)
+                .firstOrNull()?.let {
+                    /* Flow needs to be executed on a exclusive launch
+                    * because it blocks the coroutine execution since
+                    * it always needs to be active to receive live updates
+                    * */
+                    launch {
+                        buscaProdutosUsuario()
+                    }
+                }
+        }
     }
 
     private fun configuraFab() {
