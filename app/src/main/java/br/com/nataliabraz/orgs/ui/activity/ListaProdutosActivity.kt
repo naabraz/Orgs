@@ -2,23 +2,19 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.R
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.databinding.ActivityListaProdutosBinding
-import br.com.nataliabraz.orgs.extensions.vaiPara
 import br.com.nataliabraz.orgs.model.Produto
-import br.com.nataliabraz.orgs.preferences.USUARIO_LOGADO_PREFERENCES
-import br.com.nataliabraz.orgs.preferences.dataStore
 import br.com.nataliabraz.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
-class ListaProdutosActivity : AppCompatActivity() {
+class ListaProdutosActivity : UsuarioBaseActivity() {
     private val binding by lazy {
         ActivityListaProdutosBinding.inflate(layoutInflater)
     }
@@ -31,10 +27,6 @@ class ListaProdutosActivity : AppCompatActivity() {
         AppDatabase.instancia(this).produtoDao()
     }
 
-    private val usuarioDao by lazy {
-        AppDatabase.instancia(this).usuarioDao()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,7 +35,14 @@ class ListaProdutosActivity : AppCompatActivity() {
         configuraFab()
 
         lifecycleScope.launch {
-            verificaUsuarioLogado()
+            launch {
+                usuario
+                    .filterNotNull()
+                    .collect {
+                        Log.i("ListaProdutosActivity", "onCreate: $it")
+                        buscaProdutosUsuario()
+                    }
+            }
         }
     }
 
@@ -106,38 +105,9 @@ class ListaProdutosActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private suspend fun deslogaUsuario() {
-        dataStore.edit { preferences ->
-            preferences.remove(USUARIO_LOGADO_PREFERENCES)
-        }
-    }
-
     private suspend fun buscaProdutosUsuario() {
         produtoDao.buscaTodos().collect { produtos ->
             adapter.atualiza(produtos)
-        }
-    }
-
-    private suspend fun verificaUsuarioLogado() {
-        dataStore.data.collect { preferences ->
-            preferences[USUARIO_LOGADO_PREFERENCES]?.let { usuarioId ->
-                buscaUsuario(usuarioId)
-            } ?: vaiParaLogin()
-        }
-    }
-
-    private fun ListaProdutosActivity.buscaUsuario(usuarioId: String) {
-        lifecycleScope.launch {
-            usuarioDao.buscaPorId(usuarioId)
-                .firstOrNull()?.let {
-                    /* Flow needs to be executed on a exclusive launch
-                    * because it blocks the coroutine execution since
-                    * it always needs to be active to receive live updates
-                    * */
-                    launch {
-                        buscaProdutosUsuario()
-                    }
-                }
         }
     }
 
@@ -151,11 +121,6 @@ class ListaProdutosActivity : AppCompatActivity() {
     private fun vaiParaFormularioProduto() {
         val intent = Intent(this, FormularioProdutoActivity::class.java)
         startActivity(intent)
-    }
-
-    private fun vaiParaLogin() {
-        vaiPara(LoginActivity::class.java)
-        finish()
     }
 
     private fun configuraRecyclerView() {

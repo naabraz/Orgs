@@ -2,22 +2,18 @@ package br.com.nataliabraz.orgs.ui.activity
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.database.dao.ProdutoDao
-import br.com.nataliabraz.orgs.database.dao.UsuarioDao
 import br.com.nataliabraz.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
-import br.com.nataliabraz.orgs.preferences.USUARIO_LOGADO_PREFERENCES
-import br.com.nataliabraz.orgs.preferences.dataStore
 import br.com.nataliabraz.orgs.ui.dialog.FormularioImagemDialog
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class FormularioProdutoActivity : AppCompatActivity() {
+class FormularioProdutoActivity : UsuarioBaseActivity() {
     private val binding by lazy {
         ActivityFormularioProdutoBinding.inflate(layoutInflater)
     }
@@ -27,10 +23,6 @@ class FormularioProdutoActivity : AppCompatActivity() {
 
     private val produtoDao: ProdutoDao by lazy {
         AppDatabase.instancia(this).produtoDao()
-    }
-
-    private val usuarioDao: UsuarioDao by lazy {
-        AppDatabase.instancia(this).usuarioDao()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,13 +42,11 @@ class FormularioProdutoActivity : AppCompatActivity() {
         tentaCarregarProduto()
 
         lifecycleScope.launch {
-            dataStore.data.collect { preferences ->
-                preferences[USUARIO_LOGADO_PREFERENCES]?.let { usuarioId ->
-                    usuarioDao.buscaPorId(usuarioId).collect { usuario ->
-                        Log.i("FormularioProdutoActivity", "onCreate: $usuario")
-                    }
+            usuario
+                .filterNotNull()
+                .collect {
+                    Log.i("FormularioProdutoActivity", "onCreate: $it")
                 }
-            }
         }
     }
 
