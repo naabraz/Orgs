@@ -54,10 +54,8 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         lifecycleScope.launch {
             when (item.itemId) {
-                R.id.menu_logout -> {
-                    lifecycleScope.launch {
-                        deslogaUsuario()
-                    }
+                R.id.menu_perfil_usuario -> {
+                    vaiParaPerfilUsuario()
                 }
             }
 
@@ -120,6 +118,11 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
 
     private fun vaiParaFormularioProduto() {
         val intent = Intent(this, FormularioProdutoActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun vaiParaPerfilUsuario() {
+        val intent = Intent(this, PerfilUsuarioActivity::class.java)
         startActivity(intent)
     }
 

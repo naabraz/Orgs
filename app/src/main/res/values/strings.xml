@@ -30,4 +30,5 @@
     <string name="entrar">Entrar</string>
     <string name="cadastrar_usuario">cadastrar usuário</string>
     <string name="logout">Logout</string>
+    <string name="perfil">Perfil</string>
 </resources>

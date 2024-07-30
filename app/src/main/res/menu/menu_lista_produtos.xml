@@ -38,8 +38,8 @@
         </menu>
     </item>
     <item
-        android:id="@+id/menu_logout"
-        android:icon="@drawable/ic_action_logout"
-        android:title="@string/logout"
+        android:id="@+id/menu_perfil_usuario"
+        android:icon="@drawable/ic_action_perfil_usuario"
+        android:title="@string/perfil"
         app:showAsAction="ifRoom" />
 </menu>
