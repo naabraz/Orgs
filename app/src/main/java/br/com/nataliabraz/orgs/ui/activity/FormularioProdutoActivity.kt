@@ -1,7 +1,6 @@
 package br.com.nataliabraz.orgs.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import br.com.nataliabraz.orgs.database.AppDatabase
 import br.com.nataliabraz.orgs.database.dao.ProdutoDao
@@ -9,7 +8,6 @@ import br.com.nataliabraz.orgs.databinding.ActivityFormularioProdutoBinding
 import br.com.nataliabraz.orgs.extensions.carregar
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.ui.dialog.FormularioImagemDialog
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -18,12 +16,12 @@ class FormularioProdutoActivity : UsuarioBaseActivity() {
         ActivityFormularioProdutoBinding.inflate(layoutInflater)
     }
 
-    private var url: String? = null
-    private var produtoId = 0L
-
     private val produtoDao: ProdutoDao by lazy {
         AppDatabase.instancia(this).produtoDao()
     }
+
+    private var url: String? = null
+    private var produtoId = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +38,6 @@ class FormularioProdutoActivity : UsuarioBaseActivity() {
         }
 
         tentaCarregarProduto()
-
-        lifecycleScope.launch {
-            usuario
-                .filterNotNull()
-                .collect {
-                    Log.i("FormularioProdutoActivity", "onCreate: $it")
-                }
-        }
     }
 
     private fun tentaCarregarProduto() {
@@ -87,16 +77,17 @@ class FormularioProdutoActivity : UsuarioBaseActivity() {
         val produtoDao = db.produtoDao()
 
         botaoSalvar.setOnClickListener {
-            val produtoNovo = criaProduto()
-
             lifecycleScope.launch {
-                produtoDao.salva(produtoNovo)
-                finish()
+                usuario.value?.let { usuario ->
+                    val produtoNovo = criaProduto(usuario.id)
+                    produtoDao.salva(produtoNovo)
+                    finish()
+                }
             }
         }
     }
 
-    private fun criaProduto(): Produto {
+    private fun criaProduto(usuarioId: String): Produto {
         val campoNome = binding.activityFormularioProdutoNome
         val nome = campoNome.text.toString()
 
@@ -117,7 +108,8 @@ class FormularioProdutoActivity : UsuarioBaseActivity() {
             nome = nome,
             descricao = descricao,
             valor = valor,
-            imagem = url
+            imagem = url,
+            usuarioId = usuarioId
         )
     }
 }

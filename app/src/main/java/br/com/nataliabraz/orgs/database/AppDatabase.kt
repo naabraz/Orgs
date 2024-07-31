@@ -9,6 +9,7 @@ import br.com.nataliabraz.orgs.database.converter.Converters
 import br.com.nataliabraz.orgs.database.dao.ProdutoDao
 import br.com.nataliabraz.orgs.database.dao.UsuarioDao
 import br.com.nataliabraz.orgs.database.migrations.MIGRATION_1_2
+import br.com.nataliabraz.orgs.database.migrations.MIGRATION_2_3
 import br.com.nataliabraz.orgs.model.Produto
 import br.com.nataliabraz.orgs.model.Usuario
 
@@ -17,11 +18,11 @@ import br.com.nataliabraz.orgs.model.Usuario
         Produto::class,
         Usuario::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
-abstract class AppDatabase: RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun produtoDao(): ProdutoDao
     abstract fun usuarioDao(): UsuarioDao
 
@@ -36,10 +37,10 @@ abstract class AppDatabase: RoomDatabase() {
                 context,
                 AppDatabase::class.java,
                 "orgs.db"
-            )
-                .addMigrations(MIGRATION_1_2)
-                .build()
-                .also {
+            ).addMigrations(
+                MIGRATION_1_2,
+                MIGRATION_2_3
+            ).build().also {
                 db = it
             }
         }
