@@ -31,4 +31,6 @@
     <string name="cadastrar_usuario">cadastrar usuário</string>
     <string name="logout">Logout</string>
     <string name="perfil">Perfil</string>
+    <string name="todos_os_produtos">Todos os produtos</string>
+    <string name="lista_produtos">Lista produtos</string>
 </resources>

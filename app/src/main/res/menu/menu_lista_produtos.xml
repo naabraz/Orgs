@@ -37,9 +37,22 @@
                 android:title="@string/sem_ordenacao" />
         </menu>
     </item>
+
     <item
         android:id="@+id/menu_perfil_usuario"
         android:icon="@drawable/ic_action_perfil_usuario"
         android:title="@string/perfil"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_lista"
+        android:icon="@drawable/baseline_more_vert_24"
+        android:title="@string/lista_produtos"
+        app:showAsAction="ifRoom">
+        <menu>
+        <item
+            android:id="@+id/menu_lista_todos_produtos"
+            android:title="@string/todos_os_produtos" />
+        </menu>
+    </item>
 </menu>
