@@ -36,12 +36,9 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
 
         lifecycleScope.launch {
             launch {
-                usuario
-                    .filterNotNull()
-                    .collect {
-                        Log.i("ListaProdutosActivity", "onCreate: $it")
-                        buscaProdutosUsuario()
-                    }
+                usuario.filterNotNull().collect { usuario ->
+                    buscaProdutosUsuario(usuario.id)
+                }
             }
         }
     }
@@ -103,8 +100,8 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private suspend fun buscaProdutosUsuario() {
-        produtoDao.buscaTodos().collect { produtos ->
+    private suspend fun buscaProdutosUsuario(usuarioId: String) {
+        produtoDao.buscaTodosDoUsuario(usuarioId).collect { produtos ->
             adapter.atualiza(produtos)
         }
     }
@@ -132,8 +129,7 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
 
         adapter.quandoClicaNoItem = {
             val intent = Intent(
-                this,
-                DetalhesProdutoActivity::class.java
+                this, DetalhesProdutoActivity::class.java
             ).apply {
                 putExtra(CHAVE_PRODUTO_ID, it.id)
             }
