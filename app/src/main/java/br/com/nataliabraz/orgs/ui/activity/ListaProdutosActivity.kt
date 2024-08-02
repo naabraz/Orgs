@@ -56,6 +56,12 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
                 }
             }
 
+            when (item.itemId) {
+                R.id.menu_lista_todos_produtos -> {
+                    vaiParaListagemTodosProdutos()
+                }
+            }
+
             val produtosOrdenados: List<Produto>? = when (item.itemId) {
                 R.id.menu_ordena_lista_filtrar_nome_asc -> {
                     produtoDao.ordenaPorNomeAsc()
@@ -120,6 +126,11 @@ class ListaProdutosActivity : UsuarioBaseActivity() {
 
     private fun vaiParaPerfilUsuario() {
         val intent = Intent(this, PerfilUsuarioActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun vaiParaListagemTodosProdutos() {
+        val intent = Intent(this, ListaTodosProdutosActivity::class.java)
         startActivity(intent)
     }
 
