@@ -1,7 +1,7 @@
 package br.com.nataliabraz.orgs.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import br.com.nataliabraz.orgs.database.AppDatabase
@@ -18,10 +18,6 @@ class ListaTodosProdutosActivity : UsuarioBaseActivity() {
         ActivityListaTodosProdutosBinding.inflate(layoutInflater)
     }
 
-    private val adapter by lazy {
-        ListaProdutosAdapter(context = this)
-    }
-
     private val produtoDao by lazy {
         AppDatabase.instancia(this).produtoDao()
     }
@@ -29,8 +25,6 @@ class ListaTodosProdutosActivity : UsuarioBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        configuraRecyclerView()
-
         lifecycleScope.launch {
             buscaTodosProdutos()
         }
@@ -49,31 +43,19 @@ class ListaTodosProdutosActivity : UsuarioBaseActivity() {
                     }.map { produtosUsuario ->
                         criaAdapterDeProdutosComCabecalho(produtosUsuario)
                     }.flatten()
-            }.collect {
-                adapter -> recyclerView.adapter = ConcatAdapter(adapter)
+            }.collect { adapter ->
+                recyclerView.adapter = ConcatAdapter(adapter)
             }
     }
 
-    private fun criaAdapterDeProdutosComCabecalho(produtosUsuario: Map.Entry<String?, List<Produto>>) =
+    private fun criaAdapterDeProdutosComCabecalho(
+        produtosUsuario: Map.Entry<String?, List<Produto>>) =
         listOf(
             CabecalhoUsuarioAdapter(this, listOf(produtosUsuario.key)),
-            ListaProdutosAdapter(this, produtosUsuario.value) { produtoClicado ->
+            ListaProdutosAdapter(this, produtosUsuario.value, { produtoClicado ->
                 vaiPara(DetalhesProdutoActivity::class.java) {
                     putExtra(CHAVE_PRODUTO_ID, produtoClicado.id)
                 }
-            }
-        )
-
-    private fun configuraRecyclerView() {
-        val recyclerView = binding.activityListaTodosProdutosRecyclerView
-        recyclerView.adapter = adapter
-
-        adapter.quandoClicaNoItem = {
-            val intent = Intent(this, DetalhesProdutoActivity::class.java)
-                .apply {
-                    putExtra(CHAVE_PRODUTO_ID, it.id)
-                }
-            startActivity(intent)
-        }
-    }
+            }, {}, {}
+        ))
 }
